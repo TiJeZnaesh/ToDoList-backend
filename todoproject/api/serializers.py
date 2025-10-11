@@ -14,3 +14,8 @@ class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = ["id", "title", "description", "due_date", "tags", "created_at", "project", "is_completed"]
+class TaskCreateSerializer(serializers.ModelSerializer):
+    project = serializers.PrimaryKeyRelatedField(queryset=Project.objects.all())
+    class Meta:
+        model = Task
+        fields = ["id", "title", "description", "due_date", "tags", "created_at", "project", "is_completed"]
