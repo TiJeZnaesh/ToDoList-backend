@@ -20,3 +20,13 @@ class Task(models.Model):
     is_completed = models.BooleanField(default=False, verbose_name="Выполнена")
     def __str__(self):
         return self.title
+class RecurringTask(models.Model):
+    RECURRENCE_CHOICES = [
+        ("daily", "Ежедневно"), ("weekly", "Еженедельно"), ("monthly", "Ежемесячно"), ("yerly", "Ежегодно")
+    ]
+    task = models.OneToOneField(Task, verbose_name="Задача", on_delete=models.CASCADE)
+    recurrence = models.CharField(max_length=20, choices=RECURRENCE_CHOICES, verbose_name="Периодичность")
+    start_date = models.DateTimeField(verbose_name="Дата начала повторений")
+    end_date = models.DateTimeField(verbose_name="Дата окончания повторений")
+    def __str__(self):
+        return f"Повторяющаяся задача: {self.task.title} ({self.get_recurrence_display()})"
