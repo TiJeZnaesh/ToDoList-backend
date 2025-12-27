@@ -30,3 +30,16 @@ class RecurringTask(models.Model):
     end_date = models.DateTimeField(verbose_name="Дата окончания повторений")
     def __str__(self):
         return f"Повторяющаяся задача: {self.task.title} ({self.get_recurrence_display()})"
+
+class Notification(models.Model):
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='notifications', verbose_name="Задача")
+    scheduled_at = models.DateTimeField(verbose_name="Дата отправки")
+    is_sent = models.BooleanField(default=False, verbose_name="Статус отправки")
+    NOTIFICATION_METHODS = [
+        ("email", "Электронная почта"), ("telegram", "Телеграм")
+
+    ]
+    method = models.CharField(max_length=30, choices=NOTIFICATION_METHODS,verbose_name="Способ получения уведомления")
+
+    def __str__(self):
+        return f"Уведомления для: {self.task.title} в {self.scheduled_at}"
